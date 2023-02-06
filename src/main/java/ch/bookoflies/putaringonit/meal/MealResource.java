@@ -1,13 +1,20 @@
 package ch.bookoflies.putaringonit.meal;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class MealResource {
 
-    public final long id;
-    public final long programId;
-    public final String title;
-    public final String imageUrl;
-    public final String caption;
-    public final String description;
+    private long id;
+    private long programId;
+    private String title;
+    private String imageUrl;
+    private String caption;
+    private String description;
 
     public MealResource(Meal meal) {
         id = meal.getId();

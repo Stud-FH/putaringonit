@@ -26,16 +26,17 @@ public class MealService {
     }
 
     public Meal create(Program program, MealResource data) {
-        ValidationUtil.rejectEmpty(data.title, "title");
+        ValidationUtil.rejectEmpty(data.getTitle(), "title");
 
         Meal meal = new Meal();
+        meal.setContext(program.getContext());
         meal.setContextName(program.getContextName());
         meal.setProgramId(program.getId());
-        meal.setTitle(data.title);
-        meal.setImageUrl(data.imageUrl);
-        meal.setCaption(data.caption);
+        meal.setTitle(data.getTitle());
+        meal.setImageUrl(data.getImageUrl());
+        meal.setCaption(data.getCaption());
         meal = mealRepository.save(meal);
-        Text text = textService.persist(data.description, meal);
+        Text text = textService.persist(data.getDescription(), meal);
         meal.setText(text.getContent());
         return meal;
     }
@@ -55,12 +56,12 @@ public class MealService {
 
     private BiConsumer<Meal, MealResource> createUpdateHandler(String attrib) {
         switch(attrib) {
-            case "title": return (meal, data) -> meal.setTitle(data.title);
-            case "imageUrl": return (meal, data) -> meal.setImageUrl(data.imageUrl);
-            case "caption": return (meal, data) -> meal.setCaption(data.caption);
+            case "title": return (meal, data) -> meal.setTitle(data.getTitle());
+            case "imageUrl": return (meal, data) -> meal.setImageUrl(data.getImageUrl());
+            case "caption": return (meal, data) -> meal.setCaption(data.getCaption());
             case "description": return (meal, data) -> {
                 textService.clear(meal);
-                Text text = textService.persist(data.description, meal);
+                Text text = textService.persist(data.getDescription(), meal);
                 meal.setText(text.getContent());
             };
             default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));

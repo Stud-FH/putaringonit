@@ -22,7 +22,7 @@ public class DishSelectionService {
     private final TextService textService;
 
     public DishSelection select(Profile profile, Meal meal, DishSelectionResource data) {
-        Dish dish = dishService.findById(data.dishId);
+        Dish dish = dishService.findById(data.getDishId());
         if (!Objects.equals(dish.getMealId(), meal.getId())) throw ErrorResponse.Unprocessable("invalid reference").get();
         // TODO check if invited
         Optional<DishSelection> previous = dishSelectionRepository.findByProfileIdAndMealId(profile.getIdentifier(), meal.getId());
@@ -30,10 +30,10 @@ public class DishSelectionService {
         DishSelection dishSelection = new DishSelection();
         dishSelection.setProfile(profile);
         dishSelection.setProfileId(profile.getIdentifier());
-        dishSelection.setMealId(data.mealId);
+        dishSelection.setMealId(data.getMealId());
         dishSelection.setDishId(dish.getId());
         dishSelection = dishSelectionRepository.save(dishSelection);
-        Text text = textService.persist(data.comment, dishSelection);
+        Text text = textService.persist(data.getComment(), dishSelection);
         dishSelection.setText(text.getContent());
         return dishSelection;
     }

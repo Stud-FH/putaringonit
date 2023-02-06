@@ -1,14 +1,21 @@
 package ch.bookoflies.putaringonit.wish;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class WishResource {
 
-    public final long id;
-    public final String title;
-    public final String imageUrl;
-    public final String caption;
-    public final ContributionUnit unit;
-    public final Double value;
-    public final String description;
+    private long id;
+    private String title;
+    private String imageUrl;
+    private String caption;
+    private ContributionUnit unit;
+    private Double value;
+    private String description;
 
     public WishResource(Wish wish) {
         id = wish.getId();

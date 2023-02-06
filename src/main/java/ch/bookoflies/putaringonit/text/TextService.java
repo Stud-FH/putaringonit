@@ -13,6 +13,7 @@ public class TextService {
 
     public Text persist(String content, TextReferencable ref) {
         Text text = new Text();
+        // TODO set context?
         text.setContextName(ref.getContextName());
         text.setReferenceKey(ref.getReferenceKey());
         text.setContent(content);

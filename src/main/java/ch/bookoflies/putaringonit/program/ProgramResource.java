@@ -1,14 +1,21 @@
 package ch.bookoflies.putaringonit.program;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class ProgramResource {
 
-    public final long id;
-    public final String title;
-    public final String imageUrl;
-    public final String caption;
-    public final String startTime;
-    public final String endTime;
-    public final String description;
+    private long id;
+    private String title;
+    private String imageUrl;
+    private String caption;
+    private String startTime;
+    private String endTime;
+    private String description;
 
     public ProgramResource(Program program) {
         id = program.getId();

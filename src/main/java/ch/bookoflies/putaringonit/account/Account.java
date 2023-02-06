@@ -22,8 +22,8 @@ public class Account {
     private Long id;
 
     // Account is the only entity to deliver the context
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, targetEntity = Context.class)
-    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Context.class)
+    @JoinColumn
     private Context context;
 
     @Column(name = "context_name", insertable = false, updatable = false)

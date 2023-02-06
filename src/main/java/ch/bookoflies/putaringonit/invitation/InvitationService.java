@@ -32,9 +32,9 @@ public class InvitationService {
         return invitationRepository.saveAndFlush(invitation);
     }
 
-    public Invitation update(Profile profile, Program program, Invitation data, List<String> updates) {
+    public Invitation update(Profile profile, Program program, InvitationResource data, List<String> updates) {
         Invitation invitation = findByProfileAndProgram(profile, program);
-        List<BiConsumer<Invitation, Invitation>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Invitation, InvitationResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
 
         handlers.forEach(handler -> handler.accept(invitation, data));
         return invitationRepository.saveAndFlush(invitation);
@@ -45,7 +45,7 @@ public class InvitationService {
         this.invitationRepository.delete(invitation);
     }
 
-    private BiConsumer<Invitation, Invitation> createUpdateHandler(String attrib) {
+    private BiConsumer<Invitation, InvitationResource> createUpdateHandler(String attrib) {
         switch(attrib) {
             case "accepted": return (invitation, data) -> invitation.setAccepted(data.getAccepted());
             default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));

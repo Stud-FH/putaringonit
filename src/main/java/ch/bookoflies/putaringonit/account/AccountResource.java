@@ -2,22 +2,26 @@ package ch.bookoflies.putaringonit.account;
 
 import ch.bookoflies.putaringonit.context.ContextResource;
 import ch.bookoflies.putaringonit.profile.ProfileResource;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class AccountResource {
 
-    public final long id;
-    public final String contextName;
-    public final ContextResource context;
-    public final Clearance clearance;
-    public final String token;
-    public final Collection<ProfileResource> profiles;
+    private long id;
+    private ContextResource context;
+    private Clearance clearance;
+    private String token;
+    private Collection<ProfileResource> profiles;
 
     public AccountResource(Account account) {
         id = account.getId();
-        contextName = account.getContextName();
         context = new ContextResource(account.getContext());
         clearance = account.getClearance();
         token = account.getToken();

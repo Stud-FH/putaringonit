@@ -2,20 +2,26 @@ package ch.bookoflies.putaringonit.profile;
 
 import ch.bookoflies.putaringonit.invitation.InvitationResource;
 import ch.bookoflies.putaringonit.dishSelection.DishSelectionResource;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class ProfileResource {
 
-    public final String identifier;
-    public final String firstName;
-    public final String familyName;
-    public final String nickname;
-    public final String email;
-    public final Boolean blockEmail;
-    public final Collection<DishSelectionResource> dishSelections;
-    public final Collection<InvitationResource> invitations;
+    private String identifier;
+    private String firstName;
+    private String familyName;
+    private String nickname;
+    private String email;
+    private Boolean blockEmail;
+    private Collection<DishSelectionResource> dishSelections;
+    private Collection<InvitationResource> invitations;
 
     public ProfileResource(Profile profile) {
         identifier = profile.getIdentifier();

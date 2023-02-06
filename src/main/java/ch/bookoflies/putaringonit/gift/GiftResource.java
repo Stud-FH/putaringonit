@@ -1,16 +1,23 @@
 package ch.bookoflies.putaringonit.gift;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class GiftResource {
 
-    public final long id;
-    public final String donorId;
-    public final long wishId;
-    public final double value;
-    public final LocalDateTime created;
-    public final GiftStatus status;
-    public final String comment;
+    private long id;
+    private String donorId;
+    private long wishId;
+    private double value;
+    private LocalDateTime created;
+    private GiftStatus status;
+    private String comment;
 
     public GiftResource(Gift gift) {
         id = gift.getId();

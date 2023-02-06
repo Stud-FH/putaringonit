@@ -26,12 +26,12 @@ public class InvitationController {
     private final ProgramService programService;
     private final InvitationService invitationService;
 
-    @PostMapping("/{programId}/create")
+    @PostMapping("/{programId}/{profileId}/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Invitation create(
+    public InvitationResource create(
             @RequestParam("token") String token,
-            @RequestParam("profile") String profileId,
+            @PathVariable String profileId,
             @PathVariable Long programId
     ) {
         Account account = this.accountService.loginWithToken(token);
@@ -39,17 +39,18 @@ public class InvitationController {
 
         Profile profile = profileService.findById(profileId);
         Program program = programService.findById(programId);
-        return this.invitationService.create(profile, program);
+        Invitation invitation = this.invitationService.create(profile, program);
+        return new InvitationResource(invitation);
     }
 
-    @PutMapping("/{programId}/update")
+    @PutMapping("/{programId}/{profileId}/update")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Invitation update(
+    public InvitationResource update(
             @RequestParam("token") String token,
-            @RequestParam("profile") String profileId,
+            @PathVariable String profileId,
             @PathVariable Long programId,
-            @RequestBody Invitation data,
+            @RequestBody InvitationResource data,
             @RequestParam() List<String> updates
     ) {
         Account account = this.accountService.loginWithToken(token);
@@ -58,21 +59,20 @@ public class InvitationController {
         }
         Profile profile = profileService.findById(profileId);
         Program program = programService.findById(programId);
-        return this.invitationService.update(profile, program, data, updates);
+        Invitation invitation = this.invitationService.update(profile, program, data, updates);
+        return new InvitationResource(invitation);
     }
 
-    @DeleteMapping("/{programId}/delete")
+    @DeleteMapping("/{programId}/{profileId}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void delete(
             @RequestParam("token") String token,
-            @RequestParam("profile") String profileId,
+            @PathVariable String profileId,
             @PathVariable Long programId
     ) {
         Account account = this.accountService.loginWithToken(token);
-        if (!account.getProfileIds().contains(profileId)) {
-            account.matchOrThrow(Clearance.Manager, ErrorResponse.Forbidden());
-        }
+        account.matchOrThrow(Clearance.Manager, ErrorResponse.Forbidden());
         Profile profile = profileService.findById(profileId);
         Program program = programService.findById(programId);
         this.invitationService.delete(profile, program);

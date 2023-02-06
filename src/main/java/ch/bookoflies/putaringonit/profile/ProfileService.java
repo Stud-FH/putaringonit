@@ -25,15 +25,22 @@ public class ProfileService {
         return profileRepository.findAll();
     }
 
-    public Profile create(Profile template) {
-        ValidationUtil.rejectEmpty(template.getFirstName(), "firstName");
-        ValidationUtil.rejectEmpty(template.getFamilyName(), "familyName");
-        return this.profileRepository.save(template);
+    public Profile create(ProfileResource data) {
+        ValidationUtil.rejectEmpty(data.getFirstName(), "firstName");
+        ValidationUtil.rejectEmpty(data.getFamilyName(), "familyName");
+        // TODO validate
+        Profile profile = new Profile();
+        profile.setFirstName(profile.getFirstName());
+        profile.setFamilyName(data.getFamilyName());
+        profile.setNickname(data.getNickname());
+        profile.setBlockEmail(data.getBlockEmail());
+        profile.setEmail(data.getEmail());
+        return this.profileRepository.save(profile);
     }
 
-    public Profile update(String id, Profile data, List<String> updates) {
+    public Profile update(String id, ProfileResource data, List<String> updates) {
         Profile profile = findById(id);
-        List<BiConsumer<Profile, Profile>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Profile, ProfileResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
 
         // run if no errors
         handlers.forEach(handler -> handler.accept(profile, data));
@@ -45,7 +52,7 @@ public class ProfileService {
         this.profileRepository.deleteById(id);
     }
 
-    private BiConsumer<Profile, Profile> createUpdateHandler(String attrib) {
+    private BiConsumer<Profile, ProfileResource> createUpdateHandler(String attrib) {
         switch(attrib) {
             case "firstName": return (profile, data) -> profile.setFirstName(data.getFirstName());
             case "familyName": return (profile, data) -> profile.setFamilyName(data.getFamilyName());

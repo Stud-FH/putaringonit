@@ -1,5 +1,7 @@
 package ch.bookoflies.putaringonit.program;
 
+import ch.bookoflies.putaringonit.context.Context;
+import ch.bookoflies.putaringonit.context.ContextService;
 import ch.bookoflies.putaringonit.text.Text;
 import ch.bookoflies.putaringonit.common.ErrorResponse;
 import ch.bookoflies.putaringonit.common.ValidationUtil;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class ProgramService {
 
     private final ProgramRepository programRepository;
+    private final ContextService contextService;
     private final TextService textService;
 
     public Program findById(Long id) {
@@ -25,15 +28,17 @@ public class ProgramService {
     }
 
     public Program create(String contextName, ProgramResource data) {
-        ValidationUtil.rejectEmpty(data.title, "title");
+        ValidationUtil.rejectEmpty(data.getTitle(), "title");
+        Context context = contextService.findByName(contextName);
 
         Program program = new Program();
+        program.setContext(context);
         program.setContextName(contextName);
-        program.setTitle(data.title);
-        program.setImageUrl(data.imageUrl);
-        program.setCaption(data.caption);
+        program.setTitle(data.getTitle());
+        program.setImageUrl(data.getImageUrl());
+        program.setCaption(data.getCaption());
         program = programRepository.save(program);
-        Text text = textService.persist(data.description, program);
+        Text text = textService.persist(data.getDescription(), program);
         program.setText(text.getContent());
         return program;
     }
@@ -53,14 +58,16 @@ public class ProgramService {
 
     private BiConsumer<Program, ProgramResource> createUpdateHandler(String attrib) {
         switch(attrib) {
-            case "title": return (program, data) -> program.setTitle(data.title);
-            case "imageUrl": return (program, data) -> program.setImageUrl(data.imageUrl);
-            case "caption": return (program, data) -> program.setCaption(data.caption);
+            case "title": return (program, data) -> program.setTitle(data.getTitle());
+            case "imageUrl": return (program, data) -> program.setImageUrl(data.getImageUrl());
+            case "caption": return (program, data) -> program.setCaption(data.getCaption());
             case "description": return (program, data) -> {
                 textService.clear(program);
-                Text text = textService.persist(data.description, program);
+                Text text = textService.persist(data.getDescription(), program);
                 program.setText(text.getContent());
             };
+            case "startTime": return (program, data) -> program.setStartTime(data.getStartTime());
+            case "endTime": return (program, data) -> program.setEndTime(data.getEndTime());
             default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
         }
     }

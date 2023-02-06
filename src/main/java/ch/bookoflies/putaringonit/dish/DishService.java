@@ -26,16 +26,17 @@ public class DishService {
     }
 
     public Dish create(Meal meal, DishResource data) {
-        ValidationUtil.rejectEmpty(data.title, "title");
+        ValidationUtil.rejectEmpty(data.getTitle(), "title");
 
         Dish dish = new Dish();
+        dish.setContext(meal.getContext());
         dish.setContextName(meal.getContextName());
         dish.setMealId(meal.getId());
-        dish.setTitle(data.title);
-        dish.setImageUrl(data.imageUrl);
-        dish.setCaption(data.caption);
+        dish.setTitle(data.getTitle());
+        dish.setImageUrl(data.getImageUrl());
+        dish.setCaption(data.getCaption());
         dish = dishRepository.save(dish);
-        Text text = textService.persist(data.description, dish);
+        Text text = textService.persist(data.getDescription(), dish);
         dish.setText(text.getContent());
         return dish;
     }
@@ -54,12 +55,12 @@ public class DishService {
 
     private BiConsumer<Dish, DishResource> createUpdateHandler(String attrib) {
         switch(attrib) {
-            case "title": return (dish, data) -> dish.setTitle(data.title);
-            case "imageUrl": return (dish, data) -> dish.setImageUrl(data.imageUrl);
-            case "caption": return (dish, data) -> dish.setCaption(data.caption);
+            case "title": return (dish, data) -> dish.setTitle(data.getTitle());
+            case "imageUrl": return (dish, data) -> dish.setImageUrl(data.getImageUrl());
+            case "caption": return (dish, data) -> dish.setCaption(data.getCaption());
             case "description": return (dish, data) -> {
                 textService.clear(dish);
-                Text text = textService.persist(data.description, dish);
+                Text text = textService.persist(data.getDescription(), dish);
                 dish.setText(text.getContent());
             };
             default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));

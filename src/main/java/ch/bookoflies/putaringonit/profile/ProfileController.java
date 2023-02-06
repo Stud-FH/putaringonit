@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController()
@@ -21,22 +22,23 @@ public class ProfileController {
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Profile> getAll(
+    public List<ProfileResource> getAll(
             @RequestParam("token") String token
     ) {
         this.accountService.loginWithToken(token).matchOrThrow(Clearance.Manager, ErrorResponse.Forbidden());
-        return this.profileService.findAll();
+        return this.profileService.findAll().stream().map(ProfileResource::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Profile get(
+    public ProfileResource get(
             @RequestParam("token") String token,
             @PathVariable String id
     ) {
         this.accountService.loginWithToken(token).matchOrThrow(Clearance.Manager, ErrorResponse.Forbidden());
-        return this.profileService.findById(id);
+        Profile profile = this.profileService.findById(id);
+        return new ProfileResource(profile);
     }
 
     // TODO create endpoint
@@ -44,17 +46,18 @@ public class ProfileController {
     @PutMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Profile update(
+    public ProfileResource update(
             @RequestParam("token") String token,
             @PathVariable String id,
-            @RequestBody Profile data,
+            @RequestBody ProfileResource data,
             @RequestParam() List<String> updates
     ) {
         Account account = this.accountService.loginWithToken(token);
         if (!account.getProfileIds().contains(id)) {
             account.matchOrThrow(Clearance.Manager, ErrorResponse.Forbidden());
         }
-        return profileService.update(id, data, updates);
+        Profile profile = profileService.update(id, data, updates);
+        return new ProfileResource(profile);
     }
 
 

@@ -26,25 +26,26 @@ public class GiftService {
         return giftRepository.findByWishIdAndDonorId(wishId, donorId).orElseThrow(ErrorResponse.NotFound("gift not found"));
     }
 
-    public Gift create(Gift data, Wish wish, Profile donor) {
+    public Gift create(GiftResource data, Wish wish, Profile donor) {
         if (giftRepository.existsByWishIdAndDonorId(wish.getId(), donor.getIdentifier()))
             throw ErrorResponse.Conflict("gift already exists").get();
         ValidationUtil.rejectNonPositive(data.getValue(), "value");
 
         Gift gift = new Gift();
+        gift.setContext(wish.getContext());
         gift.setContextName(wish.getContextName());
         gift.setDonorId(donor.getIdentifier());
         gift.setWishId(wish.getId());
         gift.setValue(data.getValue());
         gift = giftRepository.save(gift);
-        Text text = textService.persist(data.getText(), gift);
+        Text text = textService.persist(data.getComment(), gift);
         gift.setText(text.getContent());
         return gift;
     }
 
-    public Gift update(Wish wish, Profile donor, Gift data, List<String> updates) {
+    public Gift update(Wish wish, Profile donor, GiftResource data, List<String> updates) {
         Gift gift = findByWishIdAndDonorId(wish.getId(), donor.getIdentifier());
-        List<BiConsumer<Gift, Gift>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Gift, GiftResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
 
         handlers.forEach(handler -> handler.accept(gift, data));
         return giftRepository.save(gift);
@@ -56,13 +57,13 @@ public class GiftService {
         this.giftRepository.saveAndFlush(gift);
     }
 
-    private BiConsumer<Gift, Gift> createUpdateHandler(String attrib) {
+    private BiConsumer<Gift, GiftResource> createUpdateHandler(String attrib) {
         switch(attrib) {
             case "value": return (gift, data) -> gift.setValue(data.getValue());
             case "status": return (gift, data) -> gift.setStatus(data.getStatus());
             case "comment": return (gift, data) -> {
                 textService.clear(gift);
-                Text text = textService.persist(data.getText(), gift);
+                Text text = textService.persist(data.getComment(), gift);
                 gift.setText(text.getContent());
             };
             default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));

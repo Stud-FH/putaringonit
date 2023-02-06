@@ -1,10 +1,17 @@
 package ch.bookoflies.putaringonit.dishSelection;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class DishSelectionResource {
 
-    public final long mealId;
-    public final long dishId;
-    public final String comment;
+    private long mealId;
+    private long dishId;
+    private String comment;
 
     public DishSelectionResource(DishSelection dishSelection) {
         mealId = dishSelection.getMealId();
