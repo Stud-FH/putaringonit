@@ -2,6 +2,8 @@ package ch.bookoflies.putaringonit.meal;
 
 import ch.bookoflies.putaringonit.common.TextReferencable;
 import ch.bookoflies.putaringonit.context.Context;
+import ch.bookoflies.putaringonit.context.ContextType;
+import ch.bookoflies.putaringonit.profile.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +27,7 @@ public class Meal implements TextReferencable {
     @Column(name = "context_name", insertable = false, updatable = false)
     private String contextName;
 
-    @Column(name = "program_id", insertable = false, updatable = false)
+    @Column(name = "program_id")
     private Long programId;
 
     @Column(nullable = false)
@@ -45,4 +47,13 @@ public class Meal implements TextReferencable {
         return "Meal#" + id;
     }
 
+    @Override
+    public ContextType getContextType() {
+        return ContextType.Context;
+    }
+
+    @Override
+    public Profile getProfile() {
+        throw new UnsupportedOperationException();
+    }
 }

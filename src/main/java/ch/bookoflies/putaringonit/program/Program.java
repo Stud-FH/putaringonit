@@ -2,6 +2,8 @@ package ch.bookoflies.putaringonit.program;
 
 import ch.bookoflies.putaringonit.context.Context;
 import ch.bookoflies.putaringonit.common.TextReferencable;
+import ch.bookoflies.putaringonit.context.ContextType;
+import ch.bookoflies.putaringonit.profile.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,5 +48,15 @@ public class Program implements TextReferencable {
     @Override
     public String getReferenceKey() {
         return "Program#" + id;
+    }
+
+    @Override
+    public ContextType getContextType() {
+        return ContextType.Context;
+    }
+
+    @Override
+    public Profile getProfile() {
+        throw new UnsupportedOperationException();
     }
 }

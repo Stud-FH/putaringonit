@@ -2,6 +2,8 @@ package ch.bookoflies.putaringonit.gift;
 
 import ch.bookoflies.putaringonit.context.Context;
 import ch.bookoflies.putaringonit.common.TextReferencable;
+import ch.bookoflies.putaringonit.context.ContextType;
+import ch.bookoflies.putaringonit.profile.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +27,10 @@ public class Gift implements TextReferencable {
     @Column(name = "context_name", insertable = false, updatable = false)
     private String contextName;
 
-    @Column(name = "donor_id", insertable = false, updatable = false)
+    @Column(name = "donor_id")
     private String donorId;
 
-    @Column(name = "wish_id", insertable = false, updatable = false)
+    @Column(name = "wish_id")
     private Long wishId;
 
     @Column(nullable = false)
@@ -47,5 +49,15 @@ public class Gift implements TextReferencable {
     @Override
     public String getReferenceKey() {
         return "Gift#" + id;
+    }
+
+    @Override
+    public ContextType getContextType() {
+        return ContextType.Context;
+    }
+
+    @Override
+    public Profile getProfile() {
+        throw new UnsupportedOperationException();
     }
 }

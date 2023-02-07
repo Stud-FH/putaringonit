@@ -23,16 +23,11 @@ public class Text {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Context.class)
-    @JoinColumn(name = "context_name", insertable = false, updatable = false)
     private Context context;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Profile.class)
-    @JoinColumn(name = "context_name", insertable = false, updatable = false, referencedColumnName = "identifier")
     private Profile profile;
-
-    @Column(name = "context_name", insertable = false, updatable = false)
-    private String contextName; // refers to context or profile
 
     @Column(nullable = false)
     private String referenceKey;

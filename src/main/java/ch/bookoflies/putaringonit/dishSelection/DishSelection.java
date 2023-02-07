@@ -1,6 +1,8 @@
 package ch.bookoflies.putaringonit.dishSelection;
 
 import ch.bookoflies.putaringonit.common.TextReferencable;
+import ch.bookoflies.putaringonit.context.Context;
+import ch.bookoflies.putaringonit.context.ContextType;
 import ch.bookoflies.putaringonit.profile.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -26,10 +28,10 @@ public class DishSelection implements TextReferencable {
     @Column(name = "profile_identifier", insertable = false, updatable = false)
     private String profileId;
 
-    @Column(name = "meal_id", insertable = false, updatable = false)
+    @Column(name = "meal_id")
     private Long mealId;
 
-    @Column(name = "dish_id", insertable = false, updatable = false)
+    @Column(name = "dish_id")
     private Long dishId;
 
     @Transient
@@ -43,5 +45,15 @@ public class DishSelection implements TextReferencable {
     @Override
     public String getContextName() {
         return profileId;
+    }
+
+    @Override
+    public ContextType getContextType() {
+        return ContextType.Profile;
+    }
+
+    @Override
+    public Context getContext() {
+        throw new UnsupportedOperationException();
     }
 }
