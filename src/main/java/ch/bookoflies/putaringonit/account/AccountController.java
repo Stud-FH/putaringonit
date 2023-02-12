@@ -20,7 +20,7 @@ public class AccountController {
             @RequestParam("token") String token
     ) {
         Account account = this.accountService.loginWithToken(token);
-        account.setContext(contextService.findAndDressUp(account.getContextName()));
+        account.setContext(contextService.findByName(account.getContextName()));
         return new AccountResource(account);
     }
 
@@ -31,7 +31,7 @@ public class AccountController {
             @RequestBody AccountLoginCode data
     ) {
         Account account = this.accountService.loginWithCode(data);
-        account.setContext(contextService.findAndDressUp(account.getContextName()));
+        account.setContext(contextService.findByName(account.getContextName()));
         return new AccountResource(account);
     }
 
@@ -42,7 +42,7 @@ public class AccountController {
             @RequestBody AccountLoginPassword data
     ) {
         Account account = this.accountService.loginWithPassword(data);
-        account.setContext(contextService.findAndDressUp(account.getContextName()));
+        account.setContext(contextService.findByName(account.getContextName()));
         return new AccountResource(account);
     }
 

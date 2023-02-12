@@ -25,7 +25,7 @@ public class Invitation {
     @Column(name = "profile_identifier", insertable = false, updatable = false)
     private String profileId;
 
-    @Column(name = "program_id", insertable = false, updatable = false)
+    @Column(name = "program_id")
     private Long programId;
 
     @Column

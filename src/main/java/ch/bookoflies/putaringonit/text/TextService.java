@@ -3,12 +3,14 @@ package ch.bookoflies.putaringonit.text;
 import ch.bookoflies.putaringonit.common.TextReferencable;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
 @Service
+@Transactional
 public class TextService {
 
     private final TextRepository textRepository;
@@ -22,15 +24,30 @@ public class TextService {
             case Profile: text.setProfile(ref.getProfile()); break;
         }
         text.setReferenceKey(ref.getReferenceKey());
-        text.setContent(content);
 
-        Collection<TextLine> lines = text.getLines();
-        text.setLines(new ArrayList<>());
-        Text persisted = textRepository.save(text);
+        text = textRepository.save(text);
+        text.setLines(textLineRepository.saveAll(parseContent(content, text)));
+        return text;
+    }
 
-        lines.forEach(line -> line.setText(persisted));
-        persisted.setLines(textLineRepository.saveAll(text.getLines()));
-        return persisted;
+    private Collection<TextLine> parseContent(String content, Text text) {
+        Collection<TextLine> lines = new ArrayList<>();
+        int ordinal = 0;
+        while (!content.isEmpty()) {
+            int i = ordinal++;
+            String head = content.length() >= 256? content.substring(0, 256) : content;
+            int newlineIdx = head.indexOf("\n");
+            boolean hasLinebreak = newlineIdx >= 0;
+
+            TextLine textLine = new TextLine();
+            textLine.setText(text);
+            textLine.setOrdinal(i);
+            textLine.setBreakAfter(hasLinebreak);
+            textLine.setLine(hasLinebreak? head.substring(0, newlineIdx) : head);
+            lines.add(textLine);
+            content = content.substring(hasLinebreak? newlineIdx + "\n".length() : head.length());
+        }
+        return lines;
     }
 
     public void clear(TextReferencable ref) {

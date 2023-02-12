@@ -1,5 +1,6 @@
 package ch.bookoflies.putaringonit.profile;
 
+import ch.bookoflies.putaringonit.common.TextReferencable;
 import ch.bookoflies.putaringonit.invitation.InvitationResource;
 import ch.bookoflies.putaringonit.dishSelection.DishSelectionResource;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -24,6 +27,11 @@ public class ProfileResource {
     private Collection<InvitationResource> invitations;
 
     public ProfileResource(Profile profile) {
+        Map<String, TextReferencable> dictionary = new HashMap<>();
+        profile.getDishSelections().forEach(ref -> dictionary.put(ref.getReferenceKey(), ref));
+
+        profile.getTexts().forEach(text -> dictionary.get(text.getReferenceKey()).setText(text.getContent()));
+
         identifier = profile.getIdentifier();
         firstName = profile.getFirstName();
         familyName = profile.getFamilyName();

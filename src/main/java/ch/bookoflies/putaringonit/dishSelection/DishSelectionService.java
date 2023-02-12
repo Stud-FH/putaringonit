@@ -30,7 +30,7 @@ public class DishSelectionService {
         DishSelection dishSelection = new DishSelection();
         dishSelection.setProfile(profile);
         dishSelection.setProfileId(profile.getIdentifier());
-        dishSelection.setMealId(data.getMealId());
+        dishSelection.setMealId(meal.getId());
         dishSelection.setDishId(dish.getId());
         dishSelection = dishSelectionRepository.save(dishSelection);
         Text text = textService.persist(data.getComment(), dishSelection);

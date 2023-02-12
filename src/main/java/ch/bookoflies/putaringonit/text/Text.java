@@ -34,7 +34,7 @@ public class Text {
 
     @JsonIgnore
     @OneToMany(mappedBy = "text", fetch = FetchType.EAGER, orphanRemoval = true)
-    protected Collection<TextLine> lines = new ArrayList<>();
+    private Collection<TextLine> lines;
 
     public String getContent() {
         return lines.stream()
@@ -42,23 +42,4 @@ public class Text {
                 .map(line -> line.getBreakAfter() ? line.getLine() +"\n" : line.getLine())
                 .collect(Collectors.joining());
     }
-
-    public void setContent(String content) {
-        lines = new ArrayList<>();
-        int ordinal = 0;
-        while (!content.isEmpty()) {
-            int i = ordinal++;
-            String head = content.length() >= 256? content.substring(0, 256) : content;
-            int newlineIdx = head.indexOf("\n");
-            boolean hasLinebreak = newlineIdx >= 0;
-
-            TextLine textLine = new TextLine();
-            textLine.setOrdinal(i);
-            textLine.setBreakAfter(hasLinebreak);
-            textLine.setLine(hasLinebreak? head.substring(0, newlineIdx) : head);
-            lines.add(textLine);
-            content = content.substring(hasLinebreak? newlineIdx + "\n".length() : head.length());
-        }
-    }
-
 }
