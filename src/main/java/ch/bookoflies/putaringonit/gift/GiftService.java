@@ -51,15 +51,16 @@ public class GiftService {
         return giftRepository.save(gift);
     }
 
-    public void delete(Wish wish, Profile donor) {
+    public Gift delete(Wish wish, Profile donor) {
         Gift gift = findByWishIdAndDonorId(wish.getId(), donor.getIdentifier());
-        gift.setStatus(GiftStatus.Cancelled);
-        this.giftRepository.saveAndFlush(gift);
+        this.textService.clear(gift);
+        this.giftRepository.delete(gift);
+        return gift;
     }
 
     private BiConsumer<Gift, GiftResource> createUpdateHandler(String attrib) {
         switch(attrib) {
-            case "value": return (gift, data) -> gift.setValue(data.getValue());
+//            case "value": return (gift, data) -> gift.setValue(data.getValue());
             case "status": return (gift, data) -> gift.setStatus(data.getStatus());
             case "comment": return (gift, data) -> {
                 textService.clear(gift);

@@ -34,14 +34,20 @@ public class Wish implements TextReferencable {
     private String imageUrl;
 
     @Column
+    private String productUrl;
+
+    @Column
     private String caption;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ContributionUnit unit;
 
-    @Column(nullable = false)
+    @Column
     private Double value;
+
+    @Column
+    private Boolean hideProgress;
 
     @Transient
     private String text;

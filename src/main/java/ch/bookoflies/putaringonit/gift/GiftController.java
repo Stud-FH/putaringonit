@@ -25,8 +25,6 @@ public class GiftController {
     private final GiftService giftService;
 
     @PostMapping("/{wishId}/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public GiftResource create(
             @RequestParam("token") String token,
             @RequestParam("profile") String profileId,
@@ -44,8 +42,6 @@ public class GiftController {
     }
 
     @PutMapping("/{wishId}/update")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public GiftResource update(
             @RequestParam("token") String token,
             @RequestParam("profile") String profileId,
@@ -64,9 +60,7 @@ public class GiftController {
     }
 
     @DeleteMapping("/{wishId}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
-    public void delete(
+    public GiftResource delete(
             @RequestParam("token") String token,
             @RequestParam("profile") String profileId,
             @PathVariable Long wishId
@@ -77,7 +71,8 @@ public class GiftController {
         }
         Profile profile = profileService.findById(profileId);
         Wish wish = wishService.findById(wishId);
-        this.giftService.delete(wish, profile);
+        Gift gift = this.giftService.delete(wish, profile);
+        return new GiftResource(gift);
     }
 
 

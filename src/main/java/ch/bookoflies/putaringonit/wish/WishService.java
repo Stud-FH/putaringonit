@@ -30,7 +30,8 @@ public class WishService {
     public Wish create(String contextName, WishResource data) {
         ValidationUtil.rejectEmpty(data.getTitle(), "title");
         ValidationUtil.rejectNull(data.getUnit(), "unit");
-        ValidationUtil.rejectNonPositive(data.getValue(), "value");
+        ValidationUtil.rejectNegative(data.getValue(), "value");
+        ValidationUtil.rejectNull(data.getHideProgress(), "hideProgress");
         Context context = contextService.findByName(contextName);
 
         Wish wish = new Wish();
@@ -38,9 +39,11 @@ public class WishService {
         wish.setContextName(contextName);
         wish.setTitle(data.getTitle());
         wish.setImageUrl(data.getImageUrl());
+        wish.setProductUrl(data.getProductUrl());
         wish.setCaption(data.getCaption());
         wish.setUnit(data.getUnit());
         wish.setValue(data.getValue());
+        wish.setHideProgress(data.getHideProgress());
         wish = wishRepository.save(wish);
         Text text = textService.persist(data.getDescription(), wish);
         wish.setText(text.getContent());
@@ -63,9 +66,11 @@ public class WishService {
         switch(attrib) {
             case "title": return (wish, data) -> wish.setTitle(data.getTitle());
             case "imageUrl": return (wish, data) -> wish.setImageUrl(data.getImageUrl());
+            case "productUrl": return (wish, data) -> wish.setProductUrl(data.getProductUrl());
             case "caption": return (wish, data) -> wish.setCaption(data.getCaption());
             case "unit": return (wish, data) -> wish.setUnit(data.getUnit());
             case "value": return (wish, data) -> wish.setValue(data.getValue());
+            case "hideProgress": return (wish, data) -> wish.setHideProgress(data.getHideProgress());
             case "description": return (wish, data) -> {
                 textService.clear(wish);
                 Text text = textService.persist(data.getDescription(), wish);

@@ -14,9 +14,9 @@ public abstract class ValidationUtil {
         }
     }
 
-    public static void rejectNonPositive(Integer i, String attributeName) {
-        if (i == null || i <= 0) {
-            throw ErrorResponse.Unprocessable(String.format("%s required greater than 0", attributeName)).get();
+    public static void rejectNegative(Double d, String attributeName) {
+        if (d == null || d <= 0) {
+            throw ErrorResponse.Unprocessable(String.format("%s required greater or equal 0", attributeName)).get();
         }
     }
 

@@ -6,6 +6,8 @@ import ch.bookoflies.putaringonit.common.ErrorResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+
 @AllArgsConstructor
 @Service
 public class AccountService {
@@ -16,7 +18,13 @@ public class AccountService {
     private final AccountLoginPasswordRepository accountLoginPasswordRepository;
 
     public Account loginWithCode(AccountLoginCode data) {
-        return this.accountLoginCodeRepository.findByCode(data.getCode()).orElseThrow(ErrorResponse.Unauthorized("invalid code")).getAccount();
+        Account account = this.accountLoginCodeRepository.findByCode(data.getCode()).orElseThrow(ErrorResponse.Unauthorized("invalid code")).getAccount();
+        String token = account.getToken();
+        if (token == null || token.isEmpty()) {
+            account.setToken(generateToken());
+            account = accountRepository.save(account);
+        }
+        return account;
     }
 
     public Account loginWithToken(String token) {
@@ -26,7 +34,12 @@ public class AccountService {
     public Account loginWithPassword(AccountLoginPassword data) {
         AccountLoginPassword login = this.accountLoginPasswordRepository.findByUsername(data.getUsername()).orElseThrow(ErrorResponse.NotFound(String.format("account with username %s not found", data.getUsername())));
         login.matchOrThrow(data.getPassword(), ErrorResponse.Unauthorized("password mismatch"));
-        return login.getAccount();
+        Account account = login.getAccount();String token = account.getToken();
+        if (token == null || token.isEmpty()) {
+            account.setToken(generateToken());
+            account = accountRepository.save(account);
+        }
+        return account;
     }
 
     public Profile profileLogin(String token, String profileId) {
@@ -39,6 +52,11 @@ public class AccountService {
 
     public Boolean existsUsername(String username) {
         return this.accountLoginPasswordRepository.existsByUsername(username);
+    }
+
+    public String generateToken() {
+        SecureRandom r = new SecureRandom();
+        return String.format("%05d-%05d-%05d-%05d", Math.abs(r.nextInt() % 100000), Math.abs(r.nextInt() % 100000), Math.abs(r.nextInt() % 100000), Math.abs(r.nextInt() % 100000));
     }
 
     public void invalidateToken(String token) {

@@ -30,12 +30,12 @@ public class TextService {
         return text;
     }
 
-    private Collection<TextLine> parseContent(String content, Text text) {
+    public Collection<TextLine> parseContent(String content, Text text) {
         Collection<TextLine> lines = new ArrayList<>();
         int ordinal = 0;
         while (!content.isEmpty()) {
             int i = ordinal++;
-            String head = content.length() >= 256? content.substring(0, 256) : content;
+            String head = content.length() >= 255? content.substring(0, 255) : content;
             int newlineIdx = head.indexOf("\n");
             boolean hasLinebreak = newlineIdx >= 0;
 

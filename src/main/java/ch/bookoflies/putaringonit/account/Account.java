@@ -32,8 +32,8 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Clearance clearance = Clearance.Guest;
 
-    @Column(unique = true)
-    private String token = UUID.randomUUID().toString();
+    @Column
+    private String token;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "account_profiles",
