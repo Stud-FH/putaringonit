@@ -1,6 +1,5 @@
 package ch.bookoflies.putaringonit.account;
 
-import ch.bookoflies.putaringonit.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

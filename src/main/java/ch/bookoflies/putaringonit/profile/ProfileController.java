@@ -5,7 +5,6 @@ import ch.bookoflies.putaringonit.account.Account;
 import ch.bookoflies.putaringonit.account.AccountService;
 import ch.bookoflies.putaringonit.common.ErrorResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +19,6 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping("")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public List<ProfileResource> getAll(
             @RequestParam("token") String token
     ) {
@@ -30,8 +27,6 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public ProfileResource get(
             @RequestParam("token") String token,
             @PathVariable String id
@@ -44,8 +39,6 @@ public class ProfileController {
     // TODO create endpoint
 
     @PutMapping("/{id}/update")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public ProfileResource update(
             @RequestParam("token") String token,
             @PathVariable String id,

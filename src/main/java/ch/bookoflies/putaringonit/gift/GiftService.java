@@ -45,7 +45,7 @@ public class GiftService {
 
     public Gift update(Wish wish, Profile donor, GiftResource data, List<String> updates) {
         Gift gift = findByWishIdAndDonorId(wish.getId(), donor.getIdentifier());
-        List<BiConsumer<Gift, GiftResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Gift, GiftResource>> handlers = updates.stream().map(this::createUpdateHandler).toList();
 
         handlers.forEach(handler -> handler.accept(gift, data));
         return giftRepository.save(gift);
@@ -59,15 +59,16 @@ public class GiftService {
     }
 
     private BiConsumer<Gift, GiftResource> createUpdateHandler(String attrib) {
-        switch(attrib) {
+        return switch (attrib) {
 //            case "value": return (gift, data) -> gift.setValue(data.getValue());
-            case "status": return (gift, data) -> gift.setStatus(data.getStatus());
-            case "comment": return (gift, data) -> {
+            case "status" -> (gift, data) -> gift.setStatus(data.getStatus());
+            case "comment" -> (gift, data) -> {
                 textService.clear(gift);
                 Text text = textService.persist(data.getComment(), gift);
                 gift.setText(text.getContent());
             };
-            default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
-        }
+            default ->
+                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
+        };
     }
 }

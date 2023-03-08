@@ -5,7 +5,6 @@ import ch.bookoflies.putaringonit.account.Clearance;
 import ch.bookoflies.putaringonit.account.AccountService;
 import ch.bookoflies.putaringonit.common.ErrorResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +18,6 @@ public class WishController {
     private final WishService wishService;
 
     @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public WishResource create(
             @RequestParam("token") String token,
             @RequestBody WishResource data
@@ -32,8 +29,6 @@ public class WishController {
     }
 
     @PutMapping("/{id}/update")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public WishResource update(
             @RequestParam("token") String token,
             @PathVariable Long id,
@@ -47,8 +42,6 @@ public class WishController {
     }
 
     @DeleteMapping("/{id}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void delete(
             @RequestParam("token") String token,
             @PathVariable Long id

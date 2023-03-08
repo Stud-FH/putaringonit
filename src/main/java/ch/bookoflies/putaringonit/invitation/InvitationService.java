@@ -10,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -34,7 +33,7 @@ public class InvitationService {
 
     public Invitation update(Profile profile, Program program, InvitationResource data, List<String> updates) {
         Invitation invitation = findByProfileAndProgram(profile, program);
-        List<BiConsumer<Invitation, InvitationResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Invitation, InvitationResource>> handlers = updates.stream().map(this::createUpdateHandler).toList();
 
         handlers.forEach(handler -> handler.accept(invitation, data));
         return invitationRepository.saveAndFlush(invitation);
@@ -46,9 +45,10 @@ public class InvitationService {
     }
 
     private BiConsumer<Invitation, InvitationResource> createUpdateHandler(String attrib) {
-        switch(attrib) {
-            case "accepted": return (invitation, data) -> invitation.setAccepted(data.getAccepted());
-            default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
-        }
+        return switch (attrib) {
+            case "accepted" -> (invitation, data) -> invitation.setAccepted(data.getAccepted());
+            default ->
+                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
+        };
     }
 }

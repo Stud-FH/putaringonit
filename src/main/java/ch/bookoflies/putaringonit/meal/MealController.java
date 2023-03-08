@@ -7,7 +7,6 @@ import ch.bookoflies.putaringonit.common.ErrorResponse;
 import ch.bookoflies.putaringonit.program.Program;
 import ch.bookoflies.putaringonit.program.ProgramService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +21,6 @@ public class MealController {
     private final MealService mealService;
 
     @PostMapping("/{programId}/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public MealResource create(
             @RequestParam("token") String token,
             @PathVariable Long programId,
@@ -37,8 +34,6 @@ public class MealController {
     }
 
     @PutMapping("/{id}/update")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public MealResource update(
             @RequestParam("token") String token,
             @PathVariable Long id,
@@ -51,8 +46,6 @@ public class MealController {
     }
 
     @DeleteMapping("/{id}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void delete(
             @RequestParam("token") String token,
             @PathVariable Long id

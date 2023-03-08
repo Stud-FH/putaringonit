@@ -52,7 +52,7 @@ public class WishService {
 
     public Wish update(long id, WishResource data, List<String> updates) {
         Wish wish = findById(id);
-        List<BiConsumer<Wish, WishResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Wish, WishResource>> handlers = updates.stream().map(this::createUpdateHandler).toList();
 
         handlers.forEach(handler -> handler.accept(wish, data));
         return wishRepository.saveAndFlush(wish);
@@ -63,20 +63,21 @@ public class WishService {
     }
 
     private BiConsumer<Wish, WishResource> createUpdateHandler(String attrib) {
-        switch(attrib) {
-            case "title": return (wish, data) -> wish.setTitle(data.getTitle());
-            case "imageUrl": return (wish, data) -> wish.setImageUrl(data.getImageUrl());
-            case "productUrl": return (wish, data) -> wish.setProductUrl(data.getProductUrl());
-            case "caption": return (wish, data) -> wish.setCaption(data.getCaption());
-            case "unit": return (wish, data) -> wish.setUnit(data.getUnit());
-            case "value": return (wish, data) -> wish.setValue(data.getValue());
-            case "hideProgress": return (wish, data) -> wish.setHideProgress(data.getHideProgress());
-            case "description": return (wish, data) -> {
+        return switch (attrib) {
+            case "title" -> (wish, data) -> wish.setTitle(data.getTitle());
+            case "imageUrl" -> (wish, data) -> wish.setImageUrl(data.getImageUrl());
+            case "productUrl" -> (wish, data) -> wish.setProductUrl(data.getProductUrl());
+            case "caption" -> (wish, data) -> wish.setCaption(data.getCaption());
+            case "unit" -> (wish, data) -> wish.setUnit(data.getUnit());
+            case "value" -> (wish, data) -> wish.setValue(data.getValue());
+            case "hideProgress" -> (wish, data) -> wish.setHideProgress(data.getHideProgress());
+            case "description" -> (wish, data) -> {
                 textService.clear(wish);
                 Text text = textService.persist(data.getDescription(), wish);
                 wish.setText(text.getContent());
             };
-            default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
-        }
+            default ->
+                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
+        };
     }
 }

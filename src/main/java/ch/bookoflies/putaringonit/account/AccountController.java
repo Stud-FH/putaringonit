@@ -2,7 +2,6 @@ package ch.bookoflies.putaringonit.account;
 
 import ch.bookoflies.putaringonit.context.ContextService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -14,8 +13,6 @@ public class AccountController {
     private final ContextService contextService;
 
     @GetMapping("")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public AccountResource get(
             @RequestParam("token") String token
     ) {
@@ -25,8 +22,6 @@ public class AccountController {
     }
 
     @PostMapping("/code")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public AccountResource loginWithCode(
             @RequestBody AccountLoginCode data
     ) {
@@ -36,8 +31,6 @@ public class AccountController {
     }
 
     @PostMapping("/password")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public AccountResource loginWithPassword(
             @RequestBody AccountLoginPassword data
     ) {
@@ -47,8 +40,6 @@ public class AccountController {
     }
 
     @GetMapping("/username/{username}")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Boolean existsUsername(
             @PathVariable String username
     ) {

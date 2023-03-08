@@ -1,16 +1,13 @@
 package ch.bookoflies.putaringonit.profile;
 
-import ch.bookoflies.putaringonit.common.StringPrefixedSequenceIdGenerator;
 import ch.bookoflies.putaringonit.invitation.Invitation;
 import ch.bookoflies.putaringonit.dishSelection.DishSelection;
 import ch.bookoflies.putaringonit.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Getter
@@ -18,15 +15,8 @@ import java.util.Set;
 @Entity
 public class Profile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_seq")
-    @GenericGenerator(
-            name = "profile_seq",
-            strategy = "ch.bookoflies.putaringonit.common.StringPrefixedSequenceIdGenerator",
-            parameters = {
-                    @Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
-                    @Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "Profile_"),
-                    @Parameter(name = StringPrefixedSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d") })
+    @Id@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_generator")
+    @SequenceGenerator(name = "profile_generator", sequenceName = "profile_seq", allocationSize = 1)
     private String identifier;
 
     @Column(length = 50, nullable = false)
@@ -43,6 +33,12 @@ public class Profile {
 
     @Column
     private Boolean blockEmail;
+
+    @Column(length = 50)
+    private String phoneNumber;
+
+    @Column
+    private Boolean blockPhoneNumber;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "profile", orphanRemoval = true)
     private Set<DishSelection> dishSelections = new java.util.LinkedHashSet<>();

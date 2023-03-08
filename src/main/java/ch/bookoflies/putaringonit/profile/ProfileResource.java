@@ -23,6 +23,8 @@ public class ProfileResource {
     private String nickname;
     private String email;
     private Boolean blockEmail;
+    private String phoneNumber;
+    private Boolean blockPhoneNumber;
     private Collection<DishSelectionResource> dishSelections;
     private Collection<InvitationResource> invitations;
 
@@ -38,6 +40,8 @@ public class ProfileResource {
         nickname = profile.getNickname();
         email = profile.getEmail();
         blockEmail = profile.getBlockEmail();
+        phoneNumber = profile.getPhoneNumber();
+        blockPhoneNumber = profile.getBlockPhoneNumber();
         dishSelections = profile.getDishSelections().stream().map(DishSelectionResource::new).collect(Collectors.toList());
         invitations = profile.getInvitations().stream().map(InvitationResource::new).collect(Collectors.toList());
     }

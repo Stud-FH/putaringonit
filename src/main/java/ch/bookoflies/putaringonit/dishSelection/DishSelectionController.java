@@ -5,7 +5,6 @@ import ch.bookoflies.putaringonit.meal.Meal;
 import ch.bookoflies.putaringonit.meal.MealService;
 import ch.bookoflies.putaringonit.profile.Profile;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -19,8 +18,6 @@ public class DishSelectionController {
 
 
     @PostMapping("/{mealId}/select")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @ResponseBody
     public DishSelectionResource select(
             @RequestParam("token") String token,
             @RequestParam("profile") String profileId,
@@ -34,8 +31,6 @@ public class DishSelectionController {
     }
 
     @DeleteMapping("/{mealId}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void delete(
             @RequestParam("token") String token,
             @RequestParam("profile") String profileId,

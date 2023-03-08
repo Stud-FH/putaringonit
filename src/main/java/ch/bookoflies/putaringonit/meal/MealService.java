@@ -43,7 +43,7 @@ public class MealService {
 
     public Meal update(long id, MealResource data, List<String> updates) {
         Meal meal = findById(id);
-        List<BiConsumer<Meal, MealResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Meal, MealResource>> handlers = updates.stream().map(this::createUpdateHandler).toList();
 
         handlers.forEach(handler -> handler.accept(meal, data));
         return mealRepository.saveAndFlush(meal);
@@ -55,16 +55,17 @@ public class MealService {
     }
 
     private BiConsumer<Meal, MealResource> createUpdateHandler(String attrib) {
-        switch(attrib) {
-            case "title": return (meal, data) -> meal.setTitle(data.getTitle());
-            case "imageUrl": return (meal, data) -> meal.setImageUrl(data.getImageUrl());
-            case "caption": return (meal, data) -> meal.setCaption(data.getCaption());
-            case "description": return (meal, data) -> {
+        return switch (attrib) {
+            case "title" -> (meal, data) -> meal.setTitle(data.getTitle());
+            case "imageUrl" -> (meal, data) -> meal.setImageUrl(data.getImageUrl());
+            case "caption" -> (meal, data) -> meal.setCaption(data.getCaption());
+            case "description" -> (meal, data) -> {
                 textService.clear(meal);
                 Text text = textService.persist(data.getDescription(), meal);
                 meal.setText(text.getContent());
             };
-            default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
-        }
+            default ->
+                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
+        };
     }
 }

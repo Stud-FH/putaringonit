@@ -1,6 +1,5 @@
 package ch.bookoflies.putaringonit.account;
 
-import ch.bookoflies.putaringonit.account.AccountLoginPassword;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

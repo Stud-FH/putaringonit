@@ -5,20 +5,21 @@ import ch.bookoflies.putaringonit.profile.Profile;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@javax.persistence.Entity
-public class Account {
+@Entity
+public class Account implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column
     private Long id;
 
     // Account is the only entity to deliver the context

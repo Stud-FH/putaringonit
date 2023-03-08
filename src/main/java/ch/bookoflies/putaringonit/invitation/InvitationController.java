@@ -4,14 +4,11 @@ import ch.bookoflies.putaringonit.account.Account;
 import ch.bookoflies.putaringonit.account.AccountService;
 import ch.bookoflies.putaringonit.account.Clearance;
 import ch.bookoflies.putaringonit.common.ErrorResponse;
-import ch.bookoflies.putaringonit.invitation.Invitation;
-import ch.bookoflies.putaringonit.invitation.InvitationService;
 import ch.bookoflies.putaringonit.profile.Profile;
 import ch.bookoflies.putaringonit.profile.ProfileService;
 import ch.bookoflies.putaringonit.program.Program;
 import ch.bookoflies.putaringonit.program.ProgramService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +24,6 @@ public class InvitationController {
     private final InvitationService invitationService;
 
     @PostMapping("/{programId}/{profileId}/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public InvitationResource create(
             @RequestParam("token") String token,
             @PathVariable String profileId,
@@ -44,8 +39,6 @@ public class InvitationController {
     }
 
     @PutMapping("/{programId}/{profileId}/update")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public InvitationResource update(
             @RequestParam("token") String token,
             @PathVariable String profileId,
@@ -64,8 +57,6 @@ public class InvitationController {
     }
 
     @DeleteMapping("/{programId}/{profileId}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void delete(
             @RequestParam("token") String token,
             @PathVariable String profileId,

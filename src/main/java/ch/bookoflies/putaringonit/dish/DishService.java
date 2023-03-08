@@ -43,7 +43,7 @@ public class DishService {
 
     public Dish update(Long id, DishResource data, List<String> updates) {
         Dish dish = findById(id);
-        List<BiConsumer<Dish, DishResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Dish, DishResource>> handlers = updates.stream().map(this::createUpdateHandler).toList();
 
         handlers.forEach(handler -> handler.accept(dish, data));
         return dishRepository.saveAndFlush(dish);
@@ -54,16 +54,17 @@ public class DishService {
     }
 
     private BiConsumer<Dish, DishResource> createUpdateHandler(String attrib) {
-        switch(attrib) {
-            case "title": return (dish, data) -> dish.setTitle(data.getTitle());
-            case "imageUrl": return (dish, data) -> dish.setImageUrl(data.getImageUrl());
-            case "caption": return (dish, data) -> dish.setCaption(data.getCaption());
-            case "description": return (dish, data) -> {
+        return switch (attrib) {
+            case "title" -> (dish, data) -> dish.setTitle(data.getTitle());
+            case "imageUrl" -> (dish, data) -> dish.setImageUrl(data.getImageUrl());
+            case "caption" -> (dish, data) -> dish.setCaption(data.getCaption());
+            case "description" -> (dish, data) -> {
                 textService.clear(dish);
                 Text text = textService.persist(data.getDescription(), dish);
                 dish.setText(text.getContent());
             };
-            default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
-        }
+            default ->
+                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
+        };
     }
 }

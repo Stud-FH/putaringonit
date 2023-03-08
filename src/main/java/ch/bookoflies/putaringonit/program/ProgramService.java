@@ -45,7 +45,7 @@ public class ProgramService {
 
     public Program update(long id, ProgramResource data, List<String> updates) {
         Program program = findById(id);
-        List<BiConsumer<Program, ProgramResource>> handlers = updates.stream().map(this::createUpdateHandler).collect(Collectors.toList());
+        List<BiConsumer<Program, ProgramResource>> handlers = updates.stream().map(this::createUpdateHandler).toList();
 
         handlers.forEach(handler -> handler.accept(program, data));
         return programRepository.saveAndFlush(program);
@@ -57,18 +57,19 @@ public class ProgramService {
     }
 
     private BiConsumer<Program, ProgramResource> createUpdateHandler(String attrib) {
-        switch(attrib) {
-            case "title": return (program, data) -> program.setTitle(data.getTitle());
-            case "imageUrl": return (program, data) -> program.setImageUrl(data.getImageUrl());
-            case "caption": return (program, data) -> program.setCaption(data.getCaption());
-            case "description": return (program, data) -> {
+        return switch (attrib) {
+            case "title" -> (program, data) -> program.setTitle(data.getTitle());
+            case "imageUrl" -> (program, data) -> program.setImageUrl(data.getImageUrl());
+            case "caption" -> (program, data) -> program.setCaption(data.getCaption());
+            case "description" -> (program, data) -> {
                 textService.clear(program);
                 Text text = textService.persist(data.getDescription(), program);
                 program.setText(text.getContent());
             };
-            case "startTime": return (program, data) -> program.setStartTime(data.getStartTime());
-            case "endTime": return (program, data) -> program.setEndTime(data.getEndTime());
-            default: throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
-        }
+            case "startTime" -> (program, data) -> program.setStartTime(data.getStartTime());
+            case "endTime" -> (program, data) -> program.setEndTime(data.getEndTime());
+            default ->
+                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("unknown attribute %s", attrib));
+        };
     }
 }

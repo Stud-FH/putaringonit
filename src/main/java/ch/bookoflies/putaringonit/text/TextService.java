@@ -20,8 +20,8 @@ public class TextService {
 
         Text text = new Text();
         switch (ref.getContextType()) {
-            case Context: text.setContext(ref.getContext()); break;
-            case Profile: text.setProfile(ref.getProfile()); break;
+            case Context -> text.setContext(ref.getContext());
+            case Profile -> text.setProfile(ref.getProfile());
         }
         text.setReferenceKey(ref.getReferenceKey());
 

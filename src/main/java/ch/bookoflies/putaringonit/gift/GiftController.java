@@ -9,7 +9,6 @@ import ch.bookoflies.putaringonit.profile.ProfileService;
 import ch.bookoflies.putaringonit.wish.WishService;
 import ch.bookoflies.putaringonit.common.ErrorResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

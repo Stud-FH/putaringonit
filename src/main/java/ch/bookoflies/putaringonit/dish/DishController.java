@@ -7,7 +7,6 @@ import ch.bookoflies.putaringonit.common.ErrorResponse;
 import ch.bookoflies.putaringonit.meal.Meal;
 import ch.bookoflies.putaringonit.meal.MealService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +21,6 @@ public class DishController {
     private final DishService dishService;
 
     @PostMapping("/{mealId}/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public DishResource create(
             @RequestParam("token") String token,
             @PathVariable long mealId,
@@ -37,8 +34,6 @@ public class DishController {
     }
 
     @PutMapping("/{id}/update")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public DishResource update(
             @RequestParam("token") String token,
             @PathVariable Long id,
@@ -52,8 +47,6 @@ public class DishController {
     }
 
     @DeleteMapping("/{id}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void delete(
             @RequestParam("token") String token,
             @PathVariable Long id
