@@ -32,7 +32,7 @@ public class PutaringonitApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("localhost:4200", "https://putaringonit-angular.oa.r.appspot.com/api")
+                        .allowedOrigins("localhost:4200", "https://putaringonit-angular.oa.r.appspot.com/api", "https://s-und-f.herokuapp.com/")
                         .allowedMethods("*");
             }
         };
