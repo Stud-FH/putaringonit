@@ -1,5 +1,7 @@
 package ch.bookoflies.putaringonit.profile;
 
+import ch.bookoflies.putaringonit.account.Clearance;
+import ch.bookoflies.putaringonit.context.Context;
 import ch.bookoflies.putaringonit.invitation.Invitation;
 import ch.bookoflies.putaringonit.dishSelection.DishSelection;
 import ch.bookoflies.putaringonit.text.Text;
@@ -15,7 +17,26 @@ import java.util.Set;
 @Entity
 public class Profile {
 
-    @Id@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_generator")
+    @Column // TODO PK
+    @GeneratedValue
+    private Long id;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Context.class)
+    @JoinColumn
+    private Context context;
+
+    @Column(name = "context_name", insertable = false, updatable = false)
+    private String contextName;
+
+    @Enumerated(EnumType.STRING)
+    private Clearance clearance = Clearance.Guest;
+
+    @Column
+    private String token;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_generator")
     @SequenceGenerator(name = "profile_generator", sequenceName = "profile_seq", allocationSize = 1)
     private String identifier;
 

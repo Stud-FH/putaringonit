@@ -16,6 +16,7 @@ public class GiftResource {
     private long wishId;
     private double value;
     private LocalDateTime created;
+    private HandoverOption handoverOption;
     private GiftStatus status;
     private String comment;
 
@@ -25,6 +26,7 @@ public class GiftResource {
         wishId = gift.getWishId();
         value = gift.getValue();
         created = gift.getCreated();
+        handoverOption = gift.getHandoverOption();
         status = gift.getStatus();
         comment = gift.getText();
     }

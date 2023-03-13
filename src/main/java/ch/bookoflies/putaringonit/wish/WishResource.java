@@ -15,6 +15,7 @@ public class WishResource {
     private String productUrl;
     private String caption;
     private ContributionUnit unit;
+    private Boolean isPhysical;
     private Double value;
     private Boolean hideProgress;
     private String description;

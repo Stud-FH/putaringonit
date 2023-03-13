@@ -1,5 +1,6 @@
 package ch.bookoflies.putaringonit.invitation;
 
+import ch.bookoflies.putaringonit.context.Context;
 import ch.bookoflies.putaringonit.profile.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -16,7 +17,14 @@ public class Invitation {
     @GeneratedValue
     private Long id;
 
-    // parent
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Context.class)
+    @JoinColumn
+    private Context context;
+
+    @Column(name = "context_name", insertable = false, updatable = false)
+    private String contextName;
+
     @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)

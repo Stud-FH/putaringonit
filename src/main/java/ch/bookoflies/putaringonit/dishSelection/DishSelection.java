@@ -19,7 +19,14 @@ public class DishSelection implements TextReferencable {
     @GeneratedValue
     private Long id;
 
-    // parent
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Context.class)
+    @JoinColumn
+    private Context context;
+
+    @Column(name = "context_name", insertable = false, updatable = false)
+    private String contextName;
+
     @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)

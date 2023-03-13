@@ -31,8 +31,9 @@ public class PutaringonitApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                // TODO restrict CORS
-                registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+                registry.addMapping("/**")
+                        .allowedOrigins("localhost:4200", "https://putaringonit-angular.oa.r.appspot.com/api")
+                        .allowedMethods("*");
             }
         };
     }

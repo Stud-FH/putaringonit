@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -42,6 +41,7 @@ public class WishService {
         wish.setProductUrl(data.getProductUrl());
         wish.setCaption(data.getCaption());
         wish.setUnit(data.getUnit());
+        wish.setIsPhysical(data.getIsPhysical());
         wish.setValue(data.getValue());
         wish.setHideProgress(data.getHideProgress());
         wish = wishRepository.save(wish);
@@ -69,6 +69,7 @@ public class WishService {
             case "productUrl" -> (wish, data) -> wish.setProductUrl(data.getProductUrl());
             case "caption" -> (wish, data) -> wish.setCaption(data.getCaption());
             case "unit" -> (wish, data) -> wish.setUnit(data.getUnit());
+            case "isPhysical" -> (wish, data) -> wish.setIsPhysical(data.getIsPhysical());
             case "value" -> (wish, data) -> wish.setValue(data.getValue());
             case "hideProgress" -> (wish, data) -> wish.setHideProgress(data.getHideProgress());
             case "description" -> (wish, data) -> {

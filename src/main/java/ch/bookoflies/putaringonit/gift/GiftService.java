@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -36,6 +36,9 @@ public class GiftService {
         gift.setContextName(wish.getContextName());
         gift.setDonorId(donor.getIdentifier());
         gift.setWishId(wish.getId());
+        gift.setCreated(LocalDateTime.now());
+        gift.setHandoverOption(wish.getIsPhysical()? data.getHandoverOption() : HandoverOption.Monetary);
+        gift.setStatus(GiftStatus.Reserved);
         gift.setValue(data.getValue());
         gift = giftRepository.save(gift);
         Text text = textService.persist(data.getComment(), gift);
@@ -61,6 +64,7 @@ public class GiftService {
     private BiConsumer<Gift, GiftResource> createUpdateHandler(String attrib) {
         return switch (attrib) {
 //            case "value": return (gift, data) -> gift.setValue(data.getValue());
+            case "handoverOption" -> (gift, data) -> gift.setHandoverOption(data.getHandoverOption());
             case "status" -> (gift, data) -> gift.setStatus(data.getStatus());
             case "comment" -> (gift, data) -> {
                 textService.clear(gift);

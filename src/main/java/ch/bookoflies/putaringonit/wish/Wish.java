@@ -44,6 +44,9 @@ public class Wish implements TextReferencable {
     private ContributionUnit unit;
 
     @Column
+    private Boolean isPhysical;
+
+    @Column
     private Double value;
 
     @Column

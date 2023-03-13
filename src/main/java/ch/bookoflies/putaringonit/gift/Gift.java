@@ -37,11 +37,15 @@ public class Gift implements TextReferencable {
     private Double value;
 
     @Column
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GiftStatus status = GiftStatus.Reserved;
+    private HandoverOption handoverOption;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private GiftStatus status;
 
     @Transient
     private String text;
