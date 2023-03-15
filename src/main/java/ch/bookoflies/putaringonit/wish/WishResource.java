@@ -27,6 +27,7 @@ public class WishResource {
         productUrl = wish.getProductUrl();
         caption = wish.getCaption();
         unit = wish.getUnit();
+        isPhysical = wish.getIsPhysical();
         value = wish.getValue();
         hideProgress = wish.getHideProgress();
         description = wish.getText();
